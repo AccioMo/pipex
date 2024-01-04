@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 00:38:05 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/01 18:18:33 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/04 18:29:53 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,55 +25,44 @@ static char	*ft_strncpy(char *dest, char *src, int n)
 	return (dest);
 }
 
-static char	*ft_realloc(char *istr, char *buffer)
+static char	*ft_realloc(char *istr, char *buffer, int n)
 {
 	char	*str;
 	int		l_istr;
-	int		l_buffer;
 
-	if (buffer == NULL)
+	if (n < 0)
 		return (istr);
 	l_istr = ft_strlen(istr);
-	l_buffer = ft_strlen(buffer);
-	str = (char *)malloc(sizeof(char) * (l_istr + l_buffer + 1));
+	str = (char *)malloc(sizeof(char) * (l_istr + n + 1));
 	if (!str)
 		return (free(istr), NULL);
-	ft_strncpy(ft_strncpy(str, istr, l_istr), buffer, l_buffer);
+	ft_strncpy(ft_strncpy(str, istr, l_istr), buffer, n);
 	if (istr)
 		free(istr);
 	return (str);
 }
 
-static char	*ft_read(int fd, char *buffer)
-{
-	int	rd;
-
-	rd = read(fd, buffer, BUFFER_SIZE);
-	if (rd == 0)
-	{
-		free(buffer);
-		return (NULL);
-	}
-	*(buffer + rd) = '\0';
-	return (buffer);
-}
-
 char	*ft_fopen(int fd)
 {
+	int		rd;
 	char	*buffer;
-	char	*infile;
+	char	*input;
 
-	infile = NULL;
+	rd = 1;
+	input = NULL;
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, NULL, 0) == -1)
+		return (NULL);
 	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buffer)
-		return (0);
+		return (NULL);
 	buffer[BUFFER_SIZE] = '\0';
-	while (buffer)
+	while (rd > 0)
 	{
-		buffer = ft_read(0, buffer);
-		infile = ft_realloc(infile, buffer);
-		if (!infile)
+		rd = read(fd, buffer, BUFFER_SIZE);
+		input = ft_realloc(input, buffer, rd);
+		if (!input)
 			return (free(buffer), NULL);
 	}
-	return (infile);
+	free(buffer);
+	return (input);
 }
