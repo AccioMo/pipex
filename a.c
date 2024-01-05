@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 20:58:50 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/01 21:25:31 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/05 22:46:50 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,7 @@
 
 int main(int c, char** v)
 {
-	int	end[2];
-	pipe(end);
-	dup2(1, end[1]);
-	close(1);
-	execve(*(v + 1), v + 1, (void *) NULL);
-	char* h = ft_fopen(end[0]);
-	printf("%s\n", h);
+	char *lst[] = {"ls", "-l -a", NULL};
+	execve("/bin/ls", lst, (void *) NULL);
+	while (1);
 }

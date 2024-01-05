@@ -4,16 +4,16 @@ LIBFT = libft/libft.a
 LIBFT_DIR = libft/
 NAME = pipex
 HEADER = pipex.h
-SRC = pipex_main.c
+SRC = pipex_main.c pipex_read.c pipex_execute.c
 O_SRC = $(SRC:.c=.o)
 
 all: $(LIBFT) $(NAME)
 
 $(LIBFT): $(LIBFT_DIR)
-	make -C $<
+	@make -C $<
 
 $(NAME): $(O_SRC) $(HEADER)
-	$(CC) $(FLAGS) $(O_SRC) $(LIBFT) libftprintf.a -o $(NAME)
+	$(CC) $(FLAGS) $(O_SRC) $(LIBFT) libftprintf/libftprintf.a -o $(NAME)
 
 %.o: %.c
 	$(CC) $(FLAGS) -c $< -o $@

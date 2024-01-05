@@ -1,28 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipex_execute.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/30 00:38:40 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/05 22:37:08 by mzeggaf          ###   ########.fr       */
+/*   Created: 2024/01/05 20:32:48 by mzeggaf           #+#    #+#             */
+/*   Updated: 2024/01/05 23:03:19 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "pipex.h"
 
-# define BUFFER_SIZE 1
+char	*ft_execute(char **cmd, int *end)
+{
+	char	*output;
+	int		pid;
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <fcntl.h>
-# include <stdio.h>
-# include "./libft/libft.h"
-# include "./libftprintf/ft_printf.h"
-
-char	*ft_fopen(int fd);
-char	*ft_execute(char **cmd, int *end);
-
-#endif
+	pid = fork();
+	if (pid > 0) // parent
+	{
+		dup2(end[0], 0);
+		close(end[1]);
+		return (ft_fopen(end[0]));
+	}
+	else if (pid == 0) // child
+	{
+		dup2(end[1], 1);
+		close(end[0]);
+		execve(*cmd, cmd, (void *) NULL);
+		perror(*cmd);
+	}
+	return (NULL);
+}
