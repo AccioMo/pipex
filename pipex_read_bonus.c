@@ -1,0 +1,68 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex_read_bonus.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/30 00:38:05 by mzeggaf           #+#    #+#             */
+/*   Updated: 2024/01/04 18:29:53 by mzeggaf          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "pipex_bonus.h"
+
+static char	*ft_strncpy(char *dest, char *src, int n)
+{
+	while (n > 0 && *src)
+	{
+		*dest = *src;
+		dest++;
+		src++;
+		n--;
+	}
+	*dest = '\0';
+	return (dest);
+}
+
+static char	*ft_realloc(char *istr, char *buffer, int n)
+{
+	char	*str;
+	int		l_istr;
+
+	if (n < 0)
+		return (istr);
+	l_istr = ft_strlen(istr);
+	str = (char *)malloc(sizeof(char) * (l_istr + n + 1));
+	if (!str)
+		return (free(istr), NULL);
+	ft_strncpy(ft_strncpy(str, istr, l_istr), buffer, n);
+	if (istr)
+		free(istr);
+	return (str);
+}
+
+char	*ft_fopen(int fd)
+{
+	int		rd;
+	char	*buffer;
+	char	*input;
+
+	rd = 1;
+	input = NULL;
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, NULL, 0) == -1)
+		return (NULL);
+	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buffer)
+		return (NULL);
+	buffer[BUFFER_SIZE] = '\0';
+	while (rd > 0)
+	{
+		rd = read(fd, buffer, BUFFER_SIZE);
+		input = ft_realloc(input, buffer, rd);
+		if (!input)
+			return (free(buffer), NULL);
+	}
+	free(buffer);
+	return (input);
+}
