@@ -4,7 +4,7 @@ LIBFT = libft/libft.a
 LIBFT_DIR = libft/
 NAME = pipex
 HEADER = pipex.h
-SRC = pipex_main.c pipex_read.c pipex_execute.c
+SRC = pipex_main.c pipex_read.c pipex_execute.c pipex_utils.c pipex_cmd.c
 O_SRC = $(SRC:.c=.o)
 
 all: $(LIBFT) $(NAME)

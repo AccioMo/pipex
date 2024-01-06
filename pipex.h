@@ -22,7 +22,13 @@
 # include "./libft/libft.h"
 # include "./libftprintf/ft_printf.h"
 
+/*		pipex utils		*/
+int		ft_index(char *str, char c);
+int		ft_getlen(char **array);
+
+/*		pipex functions		*/
 char	*ft_fopen(int fd);
-char	*ft_execute(char **cmd, int *end);
+char	**ft_get_cmd(char *full_cmd, char *infile, char **env);
+int		ft_execute(char **cmd, int *cmdin, int *cmdout);
 
 #endif

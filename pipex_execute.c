@@ -12,7 +12,7 @@
 
 #include "pipex.h"
 
-char	*ft_execute(char **cmd, int *end)
+int	ft_execute(char **cmd, int *black, int *white)
 {
 	char	*output;
 	int		pid;
@@ -20,16 +20,19 @@ char	*ft_execute(char **cmd, int *end)
 	pid = fork();
 	if (pid > 0) // parent
 	{
-		dup2(end[0], 0);
-		close(end[1]);
-		return (ft_fopen(end[0]));
+		dup2(white[0], 0);
+		close(white[1]);
+		
 	}
 	else if (pid == 0) // child
 	{
-		dup2(end[1], 1);
-		close(end[0]);
+		dup2(white[1], 1);
+		close(white[0]);
+		dup2(black[0], 0);
+		close(black[1]);
 		execve(*cmd, cmd, (void *) NULL);
 		perror(*cmd);
 	}
-	return (NULL);
+	else
+		perror("fork");
 }
