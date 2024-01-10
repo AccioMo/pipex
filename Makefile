@@ -3,7 +3,7 @@ CC = cc
 LIBFT = libft/libft.a
 LIBFT_DIR = libft/
 NAME = pipex
-BONUS = pipex
+BONUS = bonus
 HEADER = pipex.h
 BONUS_HEADER = pipex_bonus.h
 SRC = pipex_main.c pipex_read.c pipex_execute.c pipex_utils.c pipex_cmd.c
@@ -13,16 +13,14 @@ O_BONUS_SRC = $(BONUS_SRC:.c=.o)
 
 all: $(LIBFT) $(NAME)
 
-$(LIBFT): $(LIBFT_DIR)
-	@make -C $<
-
 $(NAME): $(O_SRC) $(HEADER)
 	$(CC) $(FLAGS) $(O_SRC) $(LIBFT) libftprintf/libftprintf.a -o $(NAME)
 
-bonus: $(LIBFT) $(BONUS)
+$(LIBFT): $(LIBFT_DIR)
+	@make -C $<
 
-$(BONUS): $(O_BONUS_SRC) $(BONUS_HEADER)
-	$(CC) $(FLAGS) $(O_BONUS_SRC) $(LIBFT) libftprintf/libftprintf.a -o $(BONUS)
+bonus: $(LIBFT) $(O_BONUS_SRC) $(BONUS_HEADER)
+	$(CC) $(FLAGS) $(O_BONUS_SRC) $(LIBFT) libftprintf/libftprintf.a -o $(NAME)
 
 %.o: %.c
 	$(CC) $(FLAGS) -c $< -o $@
@@ -35,4 +33,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all $(NAME) $(LIBFT) clean fclean re
+.PHONY: all $(LIBFT) clean fclean re

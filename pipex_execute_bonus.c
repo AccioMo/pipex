@@ -6,33 +6,37 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 20:32:48 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/05 23:03:19 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/10 00:45:34 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-int	ft_execute(char **cmd, int *black, int *white)
+char	*ft_execute(char **cmd, int input_fd)
 {
 	char	*output;
+	int		end[2];
 	int		pid;
 
+	if (pipe(end) < 0)
+		perror("pipe");
 	pid = fork();
-	if (pid > 0) // parent
+	if (pid > 0)
 	{
-		dup2(white[0], 0);
-		close(white[1]);
-		
+		wait(NULL);
+		close(end[1]);
+		output = ft_fopen(end[0]);
+		return (close(end[0]), output);
 	}
-	else if (pid == 0) // child
+	else if (pid == 0)
 	{
-		dup2(white[1], 1);
-		close(white[0]);
-		dup2(black[0], 0);
-		close(black[1]);
-		execve(*cmd, cmd, (void *) NULL);
-		perror(*cmd);
+		dup2(input_fd, 0);
+		close(end[0]);
+		dup2(end[1], 1);
+		if (execve(*cmd, cmd, NULL) == -1)
+			perror(*cmd);
 	}
 	else
 		perror("fork");
+	return (NULL);
 }

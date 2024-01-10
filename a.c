@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 20:58:50 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/05 22:46:50 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/09 21:31:14 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 
 int main(int c, char** v)
 {
-	char *lst[] = {"ls", "-l -a", NULL};
-	execve("/bin/ls", lst, (void *) NULL);
-	while (1);
+	while (1)
+	{
+		printf("a: %s\n", v[1]);
+	}
 }
