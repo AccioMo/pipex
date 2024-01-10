@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 00:38:05 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/09 23:06:05 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/10 20:29:21 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,23 +46,24 @@ char	*ft_fopen(int fd)
 {
 	int		rd;
 	char	*buffer;
-	char	*input;
+	char	*contents;
 
 	rd = 1;
-	input = NULL;
+	contents = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, NULL, 0) == -1)
-		return (NULL);
+		return (close(fd), NULL);
 	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buffer)
-		return (NULL);
+		return (close(fd), NULL);
 	buffer[BUFFER_SIZE] = '\0';
 	while (rd > 0)
 	{
 		rd = read(fd, buffer, BUFFER_SIZE);
-		input = ft_realloc(input, buffer, rd);
-		if (!input)
-			return (free(buffer), NULL);
+		contents = ft_realloc(contents, buffer, rd);
+		if (!contents)
+			return (close(fd), free(buffer), NULL);
 	}
+	close(fd);
 	free(buffer);
-	return (input);
+	return (contents);
 }

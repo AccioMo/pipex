@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 20:32:48 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/10 00:45:34 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/10 20:26:04 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 char	*ft_execute(char **cmd, int input_fd)
 {
-	char	*output;
 	int		end[2];
 	int		pid;
 
@@ -25,8 +24,8 @@ char	*ft_execute(char **cmd, int input_fd)
 	{
 		wait(NULL);
 		close(end[1]);
-		output = ft_fopen(end[0]);
-		return (close(end[0]), output);
+		close(input_fd);
+		return (ft_fopen(end[0]));
 	}
 	else if (pid == 0)
 	{
