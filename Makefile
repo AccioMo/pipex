@@ -7,30 +7,34 @@ NAME = pipex
 BONUS = pipex_bonus
 HEADER = src/pipex.h
 BONUS_HEADER = bonus/src/pipex_bonus.h
-SRC_FILES = pipex_main.c pipex_read.c pipex_execute.c pipex_cmd.c pipex_function.c
-SRC = $(addprefix src/, $(SRC_FILES))
-O_SRC = $(addprefix obj/, $(SRC_FILES:.c=.o))
-BONUS_SRC = pipex_main_bonus.c pipex_read_bonus.c pipex_execute_bonus.c pipex_cmd_bonus.c pipex_function_bonus.c pipex_heredoc_bonus.c
-O_BONUS_SRC = $(BONUS_SRC:.c=.o)
+FILES = pipex_main.c pipex_read.c pipex_execute.c pipex_cmd.c pipex_function.c
+SRC = $(addprefix src/, $(FILES))
+OBJ = $(addprefix obj/, $(FILES:.c=.o))
+BONUS_FILES = pipex_main_bonus.c pipex_read_bonus.c pipex_execute_bonus.c pipex_cmd_bonus.c pipex_function_bonus.c pipex_heredoc_bonus.c
+BONUS_SRC = $(addprefix bonus/src/, $(BONUS_FILES))
+BONUS_OBJ = $(addprefix bonus/obj/, $(BONUS_FILES:.c=.o))
 
 all: $(LIBFT) $(NAME)
 
-$(NAME): $(O_SRC) $(HEADER)
-	$(CC) $(FLAGS) $(O_SRC) $(LIBFT) libftprintf/libftprintf.a -o $(NAME)
+$(NAME): $(OBJ)
+	$(CC) $(FLAGS) $(OBJ) $(LIBFT) libftprintf/libftprintf.a -o $(NAME)
 
 $(LIBFT): $(LIBFT_DIR)
 	@make -C $<
 
 bonus: $(LIBFT) $(BONUS)
 
-$(BONUS): $(O_BONUS_SRC) $(BONUS_HEADER)
-	$(CC) $(FLAGS) $(O_BONUS_SRC) $(LIBFT) $(GNL) libftprintf/libftprintf.a -o $(NAME)
+$(BONUS): $(BONUS_OBJ)
+	$(CC) $(FLAGS) $(BONUS_OBJ) $(LIBFT) $(GNL) libftprintf/libftprintf.a -o $(NAME)
 
-obj/%.o: src/%.c
+obj/%.o: src/%.c $(HEADER)
+	$(CC) $(FLAGS) -c $< -o $@
+
+bonus/obj/%.o: bonus/src/%.c $(BONUS_HEADER)
 	$(CC) $(FLAGS) -c $< -o $@
 
 clean:
-	rm -f $(O_SRC) $(O_BONUS_SRC)
+	rm -f $(OBJ) $(BONUS_OBJ)
 
 fclean: clean
 	rm -f $(NAME)
