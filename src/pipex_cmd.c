@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_cmd.c                                        :+:      :+:    :+:   */
+/*   pipex_cmd_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/11 18:55:57 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/11 18:55:59 by mzeggaf          ###   ########.fr       */
+/*   Created: 2024/01/11 18:54:49 by mzeggaf           #+#    #+#             */
+/*   Updated: 2024/01/11 22:03:04 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
-char	**ft_get_paths(char **env)
+static char	**ft_get_paths(char **env)
 {
 	while (*env)
 	{
@@ -23,7 +23,7 @@ char	**ft_get_paths(char **env)
 	return (NULL);
 }
 
-char	*ft_match_path(char *cmd, char **paths)
+static char	*ft_match_path(char **cmd, char **paths)
 {
 	char	*path;
 	char	*full_path;
@@ -31,27 +31,29 @@ char	*ft_match_path(char *cmd, char **paths)
 	while (*paths)
 	{
 		path = ft_strjoin(*paths, "/");
-		full_path = ft_strjoin(path, cmd);
+		full_path = ft_strjoin(path, *cmd);
 		free(path);
 		if (!full_path)
-			return (NULL);
+			return (ft_free(cmd), NULL);
 		if (access(full_path, F_OK) == 0)
 			return (full_path);
 		free(full_path);
 		paths++;
 	}
-	perror("Command not found");
-	return (NULL);
+	ft_putstr_fd(*cmd, 2);
+	ft_putstr_fd(": command not found\n", 2);
+	return (ft_free(cmd), NULL);
 }
 
-char	**ft_cmd_join(char *binary, char **args, char *infile)
+static char	**ft_cmd_join(char *binary, char **args, char *infile)
 {
-	char	*str_cmd;
 	char	**cmd;
 	int		len;
 
-	len = 2 + ft_getlen(args);
-	cmd = (char **)malloc((len + 1) * sizeof(char *));
+	len = 0;
+	while (*(args + len))
+		len++;
+	cmd = (char **)malloc((len + 2 + 1) * sizeof(char *));
 	if (!cmd)
 		return (NULL);
 	*cmd++ = binary;
@@ -59,7 +61,7 @@ char	**ft_cmd_join(char *binary, char **args, char *infile)
 		*cmd++ = *args++;
 	*cmd++ = infile;
 	*cmd = NULL;
-	return (cmd - len);
+	return (cmd - (len + 2));
 }
 
 char	**ft_get_cmd(char *full_cmd, char *infile, char **env)
@@ -73,11 +75,13 @@ char	**ft_get_cmd(char *full_cmd, char *infile, char **env)
 	if (!paths)
 		return (NULL);
 	args = ft_split(full_cmd, ' ');
-	cmd_path = ft_match_path(*args, paths);
-	free(paths);
+	if (!args)
+		return (ft_free(paths), NULL);
+	cmd_path = ft_match_path(args, paths);
 	if (!cmd_path)
-		return (NULL);
+		return (ft_free(paths), NULL);
+	free(*args);
 	cmd = ft_cmd_join(cmd_path, args + 1, infile);
+	free(args);
 	return (cmd);
 }
-

@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 00:38:40 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/11 20:25:59 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/11 22:01:31 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@
 /*		pipex functions		*/
 
 char	*ft_pipex(char **cmds, char *output, char **env);
+
+void	ft_free(char **ptr);
 
 char	*ft_here_doc(char **args, char **env);
 

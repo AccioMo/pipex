@@ -6,23 +6,11 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 20:32:48 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/11 20:45:52 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/11 21:00:34 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
-
-void	ft_free(char **ptr)
-{
-	char	**hold;
-
-	hold = ptr;
-	if (!ptr)
-		return ;
-	while (*ptr)
-		free(*ptr++);
-	free(hold);
-}
 
 char	*ft_execute(char **cmd, int input_fd)
 {

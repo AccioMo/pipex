@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:39:37 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/11 18:53:30 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/11 21:36:36 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,18 @@ static void	ft_pipe_to(char *content, int end[2])
 	close(1);
 }
 
+void	ft_free(char **ptr)
+{
+	char	**hold;
+
+	hold = ptr;
+	if (!ptr)
+		return ;
+	while (*ptr)
+		free(*ptr++);
+	free(hold);
+}
+
 char	*ft_pipex(char **cmds, char *output, char **env)
 {
 	char	**cmd;
@@ -34,12 +46,15 @@ char	*ft_pipex(char **cmds, char *output, char **env)
 	{
 		if (!output)
 			return (close(tmp_fd), exit(1), NULL);
-		dup2(tmp_fd, 1);
 		ft_pipe_to(output, cmd_in);
 		cmd = ft_get_cmd(*cmds, NULL, env);
+		if (!cmd)
+			return (close(cmd_in[0]), close(tmp_fd), exit(1), NULL);
 		output = ft_execute(cmd, cmd_in[0]);
+		dup2(tmp_fd, 1);
 		cmds++;
 	}
+	dup2(tmp_fd, 1);
 	close(tmp_fd);
 	return (output);
 }

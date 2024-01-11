@@ -1,15 +1,16 @@
 CC = cc
-# FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror
 LIBFT = libft/libft.a
 LIBFT_DIR = libft/
 GNL = get_next_line/get_next_line.c get_next_line/get_next_line_utils.c 
 NAME = pipex
-BONUS = bonus
+BONUS = pipex_bonus
 HEADER = pipex.h
 BONUS_HEADER = pipex_bonus.h
-SRC = pipex_main.c pipex_read.c pipex_execute.c pipex_utils.c pipex_cmd.c
-O_SRC = $(SRC:.c=.o)
-BONUS_SRC = pipex_main_bonus.c pipex_read_bonus.c pipex_execute_bonus.c pipex_utils_bonus.c pipex_cmd_bonus.c pipex_function_bonus.c pipex_heredoc_bonus.c
+SRC_FILES = pipex_main.c pipex_read.c pipex_execute.c pipex_cmd.c pipex_function.c
+SRC = $(addprefix src/, $(SRC_FILES))
+SRC_O = $(addprefix obj/, $(SRC_FILES:.c=.o))
+BONUS_SRC = pipex_main_bonus.c pipex_read_bonus.c pipex_execute_bonus.c pipex_cmd_bonus.c pipex_function_bonus.c pipex_heredoc_bonus.c
 O_BONUS_SRC = $(BONUS_SRC:.c=.o)
 
 all: $(LIBFT) $(NAME)
@@ -20,7 +21,9 @@ $(NAME): $(O_SRC) $(HEADER)
 $(LIBFT): $(LIBFT_DIR)
 	@make -C $<
 
-bonus: $(LIBFT) $(O_BONUS_SRC) $(BONUS_HEADER)
+bonus: $(LIBFT) $(BONUS)
+
+$(BONUS): $(O_BONUS_SRC) $(BONUS_HEADER)
 	$(CC) $(FLAGS) $(O_BONUS_SRC) $(LIBFT) $(GNL) libftprintf/libftprintf.a -o $(NAME)
 
 %.o: %.c
@@ -34,4 +37,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all $(LIBFT) clean fclean re
+.PHONY: bonus all $(LIBFT) clean fclean re
