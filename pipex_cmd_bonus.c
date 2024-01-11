@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex_cmd_bonus.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/11 18:54:49 by mzeggaf           #+#    #+#             */
+/*   Updated: 2024/01/11 20:34:35 by mzeggaf          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-char	**ft_get_paths(char **env)
+static char	**ft_get_paths(char **env)
 {
 	while (*env)
 	{
@@ -12,7 +23,7 @@ char	**ft_get_paths(char **env)
 	return (NULL);
 }
 
-char	*ft_match_path(char *cmd, char **paths)
+static char	*ft_match_path(char *cmd, char **paths)
 {
 	char	*path;
 	char	*full_path;
@@ -33,14 +44,16 @@ char	*ft_match_path(char *cmd, char **paths)
 	return (NULL);
 }
 
-char	**ft_cmd_join(char *binary, char **args, char *infile)
+static char	**ft_cmd_join(char *binary, char **args, char *infile)
 {
 	char	*str_cmd;
 	char	**cmd;
 	int		len;
 
-	len = 2 + ft_getlen(args);
-	cmd = (char **)malloc((len + 1) * sizeof(char *));
+	len = 0;
+	while (*(args + len))
+		len++;
+	cmd = (char **)malloc((len + 2 + 1) * sizeof(char *));
 	if (!cmd)
 		return (NULL);
 	*cmd++ = binary;
@@ -48,7 +61,8 @@ char	**ft_cmd_join(char *binary, char **args, char *infile)
 		*cmd++ = *args++;
 	*cmd++ = infile;
 	*cmd = NULL;
-	return (cmd - len);
+	ft_printf("well: %s\n", *(cmd - (len + 2)));
+	return (cmd - (len + 2));
 }
 
 char	**ft_get_cmd(char *full_cmd, char *infile, char **env)
@@ -69,4 +83,3 @@ char	**ft_get_cmd(char *full_cmd, char *infile, char **env)
 	cmd = ft_cmd_join(cmd_path, args + 1, infile);
 	return (cmd);
 }
-

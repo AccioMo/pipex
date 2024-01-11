@@ -1,37 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_utils.c                                      :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/11 18:55:03 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/11 18:55:06 by mzeggaf          ###   ########.fr       */
+/*   Created: 2023/11/18 20:44:10 by mzeggaf           #+#    #+#             */
+/*   Updated: 2024/01/04 20:29:55 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_index(char *str, char c)
-{
-	int	i;
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-	i = 0;
-	while (*str)
-	{
-		if (*str == c)
-			return (i);
-		str++;
-		i++;
-	}
-	return (0);
-}
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 1
+# endif
 
-int	ft_getlen(char **array)
-{
-	int	len;
+# include <stdlib.h>
+# include <unistd.h>
+# include <limits.h>
 
-	len = 0;
-	while (*array++)
-		len++;
-	return (len);
-}
+char	*get_next_line(int fd);
+char	*ft_realloc(char *line, char *buffer);
+char	*ft_read(int fd, char *buffer);
+int		ft_linelen(char *str);
+int		ft_bufferlen(char *str);
 
+#endif

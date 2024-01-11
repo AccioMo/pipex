@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 00:38:40 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/10 20:28:38 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/11 20:25:59 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,18 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include "./libft/libft.h"
+# include "./get_next_line/get_next_line.h"
 # include "./libftprintf/ft_printf.h"
 
 /*		pipex utils		*/
-int		ft_index(char *str, char c);
-int		ft_getlen(char **array);
+// int		ft_index(char *str, char c);
+// int		ft_getlen(char **array);
 
 /*		pipex functions		*/
+
+char	*ft_pipex(char **cmds, char *output, char **env);
+
+char	*ft_here_doc(char **args, char **env);
 
 /* Reads from fd and returns `char *contents`.*/
 /* Will always close `fd`.*/
