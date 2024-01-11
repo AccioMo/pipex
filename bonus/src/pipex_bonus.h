@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 00:38:40 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/11 22:01:31 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/11 22:48:42 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <stdio.h>
-# include "./libft/libft.h"
-# include "./get_next_line/get_next_line.h"
-# include "./libftprintf/ft_printf.h"
+# include "../libft/libft.h"
+# include "../get_next_line/get_next_line.h"
+# include "../libftprintf/ft_printf.h"
 
 /*		pipex utils		*/
 // int		ft_index(char *str, char c);
