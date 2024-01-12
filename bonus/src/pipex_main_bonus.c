@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 17:09:37 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/11 21:44:04 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/12 15:30:13 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	print_open_fds(void)
 
 void	leaks(void)
 {
-	system("leaks pipex");
+	system("leaks pipex_bonus");
 }
 
 int	ft_empty_input(char **argv)
@@ -48,8 +48,8 @@ int	main(int argc, char *argv[], char *env[])
 	char	*output;
 	int		fd;
 
-	// atexit(print_open_fds);
-	// atexit(leaks);
+	atexit(print_open_fds);
+	atexit(leaks);
 	if (argc < 5)
 		return (0);
 	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
