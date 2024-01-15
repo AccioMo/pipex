@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:39:37 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/11 21:36:36 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/15 18:07:00 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,22 +35,32 @@ void	ft_free(char **ptr)
 	free(hold);
 }
 
+char	**ft_redirect_input(char **argv, char **output)
+{
+	if (access(*(argv + 1), F_OK) == -1)
+	{
+		perror(*(argv + 1));
+		argv++;
+	}
+	else
+	{
+		*output = ft_fopen(open(*(argv + 1), O_RDONLY));
+		if (!*output)
+			exit(1);
+	}
+	return (argv);
+}
+
 char	*ft_pipex(char **cmds, char *output, char **env)
 {
-	char	**cmd;
 	int		cmd_in[2];
 	int		tmp_fd;
 
 	tmp_fd = dup(1);
 	while (*(cmds + 1))
 	{
-		if (!output)
-			return (close(tmp_fd), exit(1), NULL);
 		ft_pipe_to(output, cmd_in);
-		cmd = ft_get_cmd(*cmds, NULL, env);
-		if (!cmd)
-			return (close(cmd_in[0]), close(tmp_fd), exit(1), NULL);
-		output = ft_execute(cmd, cmd_in[0]);
+		output = ft_execute(*cmds, cmd_in[0], env);
 		dup2(tmp_fd, 1);
 		cmds++;
 	}

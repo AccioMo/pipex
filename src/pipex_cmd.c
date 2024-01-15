@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:54:49 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/11 22:49:33 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/15 18:30:38 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,26 +23,42 @@ static char	**ft_get_paths(char **env)
 	return (NULL);
 }
 
+static int	ft_verify(char *cmd)
+{
+	while (*cmd)
+	{
+		if ((*cmd) != ' ')
+			return (0);
+		cmd++;
+	}
+	return (1);
+}
+
 static char	*ft_match_path(char **cmd, char **paths)
 {
 	char	*path;
 	char	*full_path;
 
+	if (access(*cmd, F_OK) == 0)
+		return (ft_strdup(*cmd));
 	while (*paths)
 	{
 		path = ft_strjoin(*paths, "/");
 		full_path = ft_strjoin(path, *cmd);
 		free(path);
 		if (!full_path)
-			return (ft_free(cmd), NULL);
+			return (NULL);
 		if (access(full_path, F_OK) == 0)
 			return (full_path);
 		free(full_path);
+		full_path = NULL;
 		paths++;
 	}
+	if (full_path && !ft_verify(*cmd))
+		return (full_path);
 	ft_putstr_fd(*cmd, 2);
 	ft_putstr_fd(": command not found\n", 2);
-	return (ft_free(cmd), NULL);
+	return (NULL);
 }
 
 static char	**ft_cmd_join(char *binary, char **args, char *infile)
@@ -79,7 +95,7 @@ char	**ft_get_cmd(char *full_cmd, char *infile, char **env)
 		return (ft_free(paths), NULL);
 	cmd_path = ft_match_path(args, paths);
 	if (!cmd_path)
-		return (ft_free(paths), NULL);
+		return (ft_free(args), ft_free(paths), NULL);
 	free(*args);
 	cmd = ft_cmd_join(cmd_path, args + 1, infile);
 	free(args);

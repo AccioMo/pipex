@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 00:38:40 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/11 22:57:53 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/15 18:40:46 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,9 @@
 # include "../../get_next_line/get_next_line.h"
 # include "../../libftprintf/ft_printf.h"
 
-/*		pipex utils		*/
-// int		ft_index(char *str, char c);
-// int		ft_getlen(char **array);
-
 /*		pipex functions		*/
+
+char	**ft_redirect_input(char **argv, char **output);
 
 char	*ft_pipex(char **cmds, char *output, char **env);
 
@@ -45,6 +43,6 @@ char	**ft_get_cmd(char *str, char *infile, char **env);
 
 /* Executes `cmd` in seperate process thats reads from `input_fd`.*/
 /* Will always close `input_fd`.*/
-char	*ft_execute(char **cmd, int input_fd);
+char	*ft_execute(char *cmd, int input_fd, char **env);
 
 #endif

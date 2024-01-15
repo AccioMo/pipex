@@ -53,4 +53,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all bonus clean fclean re
+.PHONY: all $(LIBFT) bonus clean fclean re

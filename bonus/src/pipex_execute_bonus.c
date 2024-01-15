@@ -6,37 +6,48 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 20:32:48 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/11 21:00:34 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/15 18:56:20 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-char	*ft_execute(char **cmd, int input_fd)
+static char	*ft_child_process(char *cmds, int end[2], int input_fd, char **env)
 {
+	char	**cmd;
+
+	cmd = ft_get_cmd(cmds, NULL, env);
+	if (!cmd)
+		return (close(input_fd), exit(1), NULL);
+	dup2(input_fd, 0);
+	close(end[0]);
+	dup2(end[1], 1);
+	execve(*cmd, cmd, NULL);
+	return (perror(*cmd), NULL);
+}
+
+char	*ft_execute(char *cmds, int input_fd, char **env)
+{
+	char	*output;
 	int		end[2];
 	int		pid;
 
 	if (pipe(end) < 0)
-		perror("pipe");
+		return (perror("pipe"), NULL);
 	pid = fork();
 	if (pid > 0)
 	{
 		wait(NULL);
-		close(end[1]);
 		close(input_fd);
-		ft_free(cmd);
-		return (ft_fopen(end[0]));
+		close(end[1]);
+		output = ft_fopen(end[0]);
+		return (output);
 	}
 	else if (pid == 0)
 	{
-		dup2(input_fd, 0);
-		close(end[0]);
-		dup2(end[1], 1);
-		if (execve(*cmd, cmd, NULL) == -1)
-			perror(*cmd);
+		output = ft_child_process(cmds, end, input_fd, env);
+		return (output);
 	}
 	else
-		perror("fork");
-	return (NULL);
+		return (perror("fork"), NULL);
 }

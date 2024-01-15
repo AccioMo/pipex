@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 20:47:41 by mzeggaf           #+#    #+#             */
-/*   Updated: 2023/12/27 20:47:01 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/15 18:59:12 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ static int	count_words(char *s, char c)
 			words++;
 		s++;
 	}
+	if (words == 0)
+		return (1);
 	return (words);
 }
 
@@ -49,7 +51,7 @@ static char	*assign_word(char **tab, char *s, char c)
 	return (s + len);
 }
 
-static void	ft_freeall(void **ptr, void *end)
+static void	ft_free_all(char **ptr, char *end)
 {
 	int	i;
 
@@ -74,16 +76,15 @@ char	**ft_split(char *s, char c)
 	words = count_words(s, c);
 	tab = (char **)malloc((words + 1) * sizeof(char *));
 	if (!tab)
-		return (exit(1), NULL);
+		return (NULL);
 	tab[words] = NULL;
+	if (words == 1)
+		c = '\0';
 	while (i < words)
 	{
 		s = assign_word(tab + i, s, c);
 		if (s == NULL)
-		{
-			ft_freeall((void **)tab, *(tab + i));
-			exit(1);
-		}
+			return (ft_free_all(tab, *(tab + i)), NULL);
 		i++;
 	}
 	return (tab);

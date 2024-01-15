@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:40:33 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/11 22:04:28 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/15 17:44:03 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,5 @@ char	*ft_here_doc(char **args, char **env)
 		ft_putstr_fd("pipe heredoc> ", 1);
 		buffer = get_next_line(0);
 	}
-	free(buffer);
 	return (ft_pipex(args + 1, input, env));
 }
