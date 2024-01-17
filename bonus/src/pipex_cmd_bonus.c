@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:54:49 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/15 18:57:37 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/17 22:32:54 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ static char	*ft_match_path(char **cmd, char **paths)
 	char	*path;
 	char	*full_path;
 
+	// if (access(*cmd, X_OK) == 0)
+	// 	full_path = ft_strdup(*cmd);
 	while (*paths)
 	{
 		path = ft_strjoin(*paths, "/");
@@ -46,16 +48,15 @@ static char	*ft_match_path(char **cmd, char **paths)
 		free(path);
 		if (!full_path)
 			return (NULL);
-		if (access(full_path, F_OK) == 0)
+		if (access(full_path, X_OK) == 0)
 			break ;
 		free(full_path);
 		full_path = NULL;
 		paths++;
 	}
-	if (access(*cmd, F_OK) == 0)
-		full_path = ft_strdup(*cmd);
 	if (full_path && !ft_verify(*cmd))
 		return (full_path);
+	// perror(*cmd);
 	ft_putstr_fd(*cmd, 2);
 	ft_putstr_fd(": command not found\n", 2);
 	return (NULL);

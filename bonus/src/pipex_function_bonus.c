@@ -6,22 +6,11 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:39:37 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/15 18:07:00 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/17 23:55:47 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
-
-static void	ft_pipe_to(char *content, int end[2])
-{
-	if (pipe(end) < 0)
-		perror("pipe");
-	dup2(end[1], 1);
-	ft_putstr_fd(content, end[1]);
-	close(end[1]);
-	free(content);
-	close(1);
-}
 
 void	ft_free(char **ptr)
 {
@@ -35,36 +24,39 @@ void	ft_free(char **ptr)
 	free(hold);
 }
 
-char	**ft_redirect_input(char **argv, char **output)
-{
-	if (access(*(argv + 1), F_OK) == -1)
-	{
-		perror(*(argv + 1));
-		argv++;
-	}
-	else
-	{
-		*output = ft_fopen(open(*(argv + 1), O_RDONLY));
-		if (!*output)
-			exit(1);
-	}
-	return (argv);
-}
+// int	ft_redirect_input(char **cmds)
+// {
+// 	int	fd;
 
-char	*ft_pipex(char **cmds, char *output, char **env)
-{
-	int		cmd_in[2];
-	int		tmp_fd;
 
-	tmp_fd = dup(1);
+// 	if (fd < 0)
+// 		return (perror(*cmds), -1);
+// 	return (fd);
+// }
+
+void	ft_pipex(char **cmds, char **env)
+{
+	char	*output;
+	int		end[2];
+	int		fdin;
+
+	fdin = open(*cmds++, O_RDONLY);
 	while (*(cmds + 1))
 	{
-		ft_pipe_to(output, cmd_in);
-		output = ft_execute(*cmds, cmd_in[0], env);
-		dup2(tmp_fd, 1);
+		if (pipe(end) < 0)
+			return (perror("pipe"));
+		printf("%d cmd: %s\n", fdin, *cmds);
+		if (ft_exec_cmd(*cmds, env, fdin, end[1]) < 0)
+			return (perror(*cmds));
+		close(fdin);
+		fdin = dup(end[0]);
+		if (fdin < 0)
+			return (perror("dup"));
+		(close(end[1]), close(end[0]));
 		cmds++;
 	}
-	dup2(tmp_fd, 1);
-	close(tmp_fd);
-	return (output);
+	output = ft_fopen(fdin);
+	fdin = open(*cmds, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+	ft_putstr_fd(output, fdin);
+	close(fdin);
 }

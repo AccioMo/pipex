@@ -6,48 +6,54 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 20:32:48 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/15 18:56:20 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/17 23:57:30 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-static char	*ft_child_process(char *cmds, int end[2], int input_fd, char **env)
-{
-	char	**cmd;
+// static void	ft_child(char *str_cmd, int *end, int cmd_in, char **env)
+// {
+// 	int		dev_null_fd;
 
-	cmd = ft_get_cmd(cmds, NULL, env);
-	if (!cmd)
-		return (close(input_fd), exit(1), NULL);
-	dup2(input_fd, 0);
-	close(end[0]);
-	dup2(end[1], 1);
-	execve(*cmd, cmd, NULL);
-	return (perror(*cmd), NULL);
+
+// }
+
+void	ft_null_fd(int fd)
+{
+	int	dev_null_fd;
+
+	if (fd > 0)
+		dup2(fd, 0);
+	else
+	{
+		dev_null_fd = open("/dev/null", O_RDONLY);
+		if (dev_null_fd == -1)
+		{
+			perror("/dev/null");
+			return ;
+		}
+		dup2(dev_null_fd, 0);
+		close(dev_null_fd);
+	}
 }
 
-char	*ft_execute(char *cmds, int input_fd, char **env)
+int	ft_exec_cmd(char *str_cmd, char **env, int cmd_in, int cmd_out)
 {
-	char	*output;
-	int		end[2];
+	char	**cmd;
 	int		pid;
 
-	if (pipe(end) < 0)
-		return (perror("pipe"), NULL);
 	pid = fork();
-	if (pid > 0)
+	if (pid == 0)
 	{
-		wait(NULL);
-		close(input_fd);
-		close(end[1]);
-		output = ft_fopen(end[0]);
-		return (output);
+		cmd = ft_get_cmd(str_cmd, NULL, env);
+		if (!cmd)
+			return (-1);
+		if (dup2(cmd_in, 0) < 0 || dup2(cmd_out, 1) < 0)
+			return (perror("dup2"), -1);
+		// ft_null_fd(cmd_in);
+		execve(*cmd, cmd, NULL);
+		perror(*cmd);
 	}
-	else if (pid == 0)
-	{
-		output = ft_child_process(cmds, end, input_fd, env);
-		return (output);
-	}
-	else
-		return (perror("fork"), NULL);
+	return (pid);
 }

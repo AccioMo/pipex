@@ -29,7 +29,7 @@ $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
 $(NAME): $(OBJ)
-	$(CC) $(FLAGS) $(OBJ) $(LIBFT) libftprintf/libftprintf.a -o $(NAME)
+	$(CC) $(FLAGS) $(OBJ) $(LIBFT) -o $(NAME)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(HEADER)
 	$(CC) $(FLAGS) -c $< -o $@
@@ -40,7 +40,7 @@ $(BONUS_OBJ_DIR):
 	mkdir -p $(BONUS_OBJ_DIR)
 
 $(BONUS): $(BONUS_OBJ)
-	$(CC) $(FLAGS) $(BONUS_OBJ) $(LIBFT) $(GNL) libftprintf/libftprintf.a -o $(BONUS)
+	$(CC) $(FLAGS) $(BONUS_OBJ) $(LIBFT) $(GNL) -o $(BONUS)
 
 $(BONUS_OBJ_DIR)%.o: $(BONUS_SRC_DIR)%.c $(BONUS_HEADER)
 	$(CC) $(FLAGS) -c $< -o $@
