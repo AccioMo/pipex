@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 00:38:40 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/18 16:21:31 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/18 16:43:40 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 # include <stdio.h>
 # include <errno.h>
 # include "../libft/libft.h"
-# include "../get_next_line/get_next_line.h"
 
 /* Takes in a null-terminated array of `cmds`, executes each in new */
 /* execve(2) process, and outputs to file with same name as last element */
