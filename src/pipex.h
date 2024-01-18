@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 00:38:40 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/15 18:40:52 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/18 16:21:31 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,28 +19,26 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <stdio.h>
+# include <errno.h>
 # include "../libft/libft.h"
 # include "../get_next_line/get_next_line.h"
-# include "../libftprintf/ft_printf.h"
 
-/*		pipex functions		*/
+/* Takes in a null-terminated array of `cmds`, executes each in new */
+/* execve(2) process, and outputs to file with same name as last element */
+/* of the array. Returns `1` or `0`.*/
+int		ft_pipex(char **cmds, char **paths_env);
 
-char	**ft_redirect_input(char **argv, char **output);
-
-char	*ft_pipex(char **cmds, char *output, char **env);
-
+/* Free a null-terminated array. */
 void	ft_free(char **ptr);
 
-/* Reads from fd and returns `char *contents`.*/
-/* Will always close `fd`.*/
-char	*ft_fopen(int fd);
+/* Returns `PATH` environment variable.*/
+char	**ft_get_paths(char **env);
 
-/* Takes in `str` and converts it into double ptr `char **cmd` for use in */
-/* execve(2).*/
-char	**ft_get_cmd(char *str, char *infile, char **env);
+/* Matches `command` with its binary executable. Returns path on success, */
+/* `NULL` on failure. */
+char	*ft_match_path(char *command, char **paths_env);
 
-/* Executes `cmd` in seperate process thats reads from `input_fd`.*/
-/* Will always close `input_fd`.*/
-char	*ft_execute(char *cmd, int input_fd, char **env);
+/* Executes `cmd` in new process. Reads from `fdin` and writes to `fdout`.*/
+void	ft_exec_cmd(char *str_cmd, char **paths_env, int fdin, int fdout);
 
 #endif

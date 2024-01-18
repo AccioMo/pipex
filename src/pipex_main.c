@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 17:09:37 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/18 12:38:27 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/18 16:28:20 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	main(int argc, char *argv[], char *env[])
 {
-	char	*paths_env;
+	char	**paths_env;
 	int		exit_status;
 
 	if (argc != 5)
@@ -23,5 +23,7 @@ int	main(int argc, char *argv[], char *env[])
 	if (!paths_env)
 		return (1);
 	exit_status = ft_pipex(argv + 1, paths_env);
+	while (wait(NULL) > 0)
+		;
 	return (0);
 }

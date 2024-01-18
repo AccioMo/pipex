@@ -8,7 +8,7 @@ NAME = pipex
 SRC_DIR = src/
 OBJ_DIR = obj/
 HEADER = $(SRC_DIR)pipex.h
-FILES = pipex_main.c pipex_read.c pipex_execute.c pipex_cmd.c pipex_function.c
+FILES = pipex_main.c pipex_cmd.c pipex_function.c
 SRC = $(addprefix $(SRC_DIR), $(FILES))
 OBJ = $(addprefix $(OBJ_DIR), $(FILES:.c=.o))
 

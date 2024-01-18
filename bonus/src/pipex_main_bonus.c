@@ -6,31 +6,11 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 17:09:37 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/18 12:34:11 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/18 16:40:15 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
-
-// void	print_open_fds(void)
-// {
-// 	int	flags;
-// 	int	fd;
-
-// 	fd = 0;
-// 	while (fd < 256)
-// 	{
-// 		flags = fcntl(fd, F_GETFD);
-// 		if (flags != -1)
-// 			printf("File Descriptor %d is open\n", fd);
-// 		fd++;
-// 	}
-// }
-
-// void	leaks(void)
-// {
-// 	system("leaks pipex_bonus");
-// }
 
 int	main(int argc, char *argv[], char *env[])
 {
@@ -46,7 +26,7 @@ int	main(int argc, char *argv[], char *env[])
 		exit_status = ft_here_doc(argv + 2, paths_env);
 	else
 		exit_status = ft_pipex(argv + 1, paths_env);
-	// atexit(leaks);
-	// atexit(print_open_fds);
+	while (wait(NULL) > 0)
+		;
 	return (exit_status);
 }
