@@ -16,7 +16,7 @@ BONUS = pipex_bonus
 BONUS_SRC_DIR = bonus/src/
 BONUS_OBJ_DIR = bonus/obj/
 BONUS_HEADER = $(BONUS_SRC_DIR)pipex_bonus.h
-BONUS_FILES = pipex_main_bonus.c pipex_read_bonus.c pipex_execute_bonus.c pipex_cmd_bonus.c pipex_function_bonus.c pipex_heredoc_bonus.c
+BONUS_FILES = pipex_main_bonus.c pipex_execute_bonus.c pipex_cmd_bonus.c pipex_function_bonus.c pipex_heredoc_bonus.c
 BONUS_SRC = $(addprefix $(BONUS_SRC_DIR), $(BONUS_FILES))
 BONUS_OBJ = $(addprefix $(BONUS_OBJ_DIR), $(BONUS_FILES:.c=.o))
 

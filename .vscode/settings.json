@@ -15,6 +15,7 @@
 		"locale": "c",
 		"__bit_reference": "c",
 		"ios": "c",
-		"pipex_bonus.h": "c"
+		"pipex_bonus.h": "c",
+		"stdlib.h": "c"
 	}
 }
