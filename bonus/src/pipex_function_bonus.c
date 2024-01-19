@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:39:37 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/18 16:33:51 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/19 18:15:27 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ int	ft_pipex(char **cmds, char **paths_env)
 	}
 	fdout = open(*(cmds + 1), O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	ft_exec_cmd(*cmds, paths_env, fdin, fdout);
-	ft_free(paths_env);
 	(close(fdin), close(fdout));
 	return (EXIT_SUCCESS);
 }
