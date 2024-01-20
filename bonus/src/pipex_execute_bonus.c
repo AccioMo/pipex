@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 20:32:48 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/18 12:30:01 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/20 15:44:06 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	ft_perror(char **cmd)
 	exit(EXIT_FAILURE);
 }
 
-void	ft_exec_cmd(char *full_cmd, char **paths_env, int cmd_in, int cmd_out)
+void	ft_exec_cmd(char *full_cmd, char **paths_env, int cmd_in, int *fd_pipe)
 {
 	char	**cmd;
 	char	*cmd_path;
@@ -35,8 +35,9 @@ void	ft_exec_cmd(char *full_cmd, char **paths_env, int cmd_in, int cmd_out)
 	{
 		if (cmd_in < 0)
 			exit(EXIT_FAILURE);
-		if (dup2(cmd_in, 0) < 0 || dup2(cmd_out, 1) < 0)
+		if (dup2(cmd_in, 0) < 0 || dup2(fd_pipe[1], 1) < 0)
 			(perror("dup2"), exit(EXIT_FAILURE));
+		(close(cmd_in), close(fd_pipe[1]), close(fd_pipe[0]));
 		cmd = ft_split(full_cmd, ' ');
 		cmd_path = ft_match_path(*cmd, paths_env);
 		if (!cmd || !cmd_path)

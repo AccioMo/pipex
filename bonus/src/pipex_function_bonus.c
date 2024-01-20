@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:39:37 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/19 18:15:27 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/20 15:48:23 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,13 @@ int	ft_pipex(char **cmds, char **paths_env)
 {
 	int		end[2];
 	int		fdin;
-	int		fdout;
 
 	fdin = ft_redirect_input(*cmds++);
 	while (*(cmds + 2))
 	{
 		if (pipe(end) < 0)
 			return (perror("pipe"), EXIT_FAILURE);
-		ft_exec_cmd(*cmds, paths_env, fdin, end[1]);
+		ft_exec_cmd(*cmds, paths_env, fdin, end);
 		close(fdin);
 		fdin = dup(end[0]);
 		if (fdin < 0)
@@ -53,8 +52,12 @@ int	ft_pipex(char **cmds, char **paths_env)
 		(close(end[1]), close(end[0]));
 		cmds++;
 	}
-	fdout = open(*(cmds + 1), O_WRONLY | O_CREAT | O_TRUNC, 0666);
-	ft_exec_cmd(*cmds, paths_env, fdin, fdout);
-	(close(fdin), close(fdout));
+	if (pipe(end) < 0)
+		return (perror("pipe"), EXIT_FAILURE);
+	end[1] = open(*(cmds + 1), O_WRONLY | O_CREAT | O_TRUNC, 0666);
+	if (end[1] < 0)
+		return (perror(*(cmds + 1)), EXIT_FAILURE);
+	ft_exec_cmd(*cmds, paths_env, fdin, end);
+	(close(fdin), close(end[1]), close(end[0]));
 	return (EXIT_SUCCESS);
 }

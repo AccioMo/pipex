@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 00:38:40 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/18 16:43:40 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/20 16:02:32 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,6 @@ char	**ft_get_paths(char **env);
 char	*ft_match_path(char *command, char **paths_env);
 
 /* Executes `cmd` in new process. Reads from `fdin` and writes to `fdout`.*/
-void	ft_exec_cmd(char *str_cmd, char **paths_env, int fdin, int fdout);
+void	ft_exec_cmd(char *str_cmd, char **paths_env, int fdin, int *fd_pipe);
 
 #endif

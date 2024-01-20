@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:39:37 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/19 18:16:06 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/20 16:02:02 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void	ft_perror(char **cmd)
 	exit(EXIT_FAILURE);
 }
 
-void	ft_exec_cmd(char *full_cmd, char **paths_env, int cmd_in, int cmd_out)
+void	ft_exec_cmd(char *full_cmd, char **paths_env, int cmd_in, int *fd_pipe)
 {
 	char	**cmd;
 	char	*cmd_path;
@@ -57,8 +57,9 @@ void	ft_exec_cmd(char *full_cmd, char **paths_env, int cmd_in, int cmd_out)
 	{
 		if (cmd_in < 0)
 			exit(EXIT_FAILURE);
-		if (dup2(cmd_in, 0) < 0 || dup2(cmd_out, 1) < 0)
+		if (dup2(cmd_in, 0) < 0 || dup2(fd_pipe[1], 1) < 0)
 			(perror("dup2"), exit(EXIT_FAILURE));
+		(close(cmd_in), close(fd_pipe[1]), close(fd_pipe[0]));
 		cmd = ft_split(full_cmd, ' ');
 		cmd_path = ft_match_path(*cmd, paths_env);
 		if (!cmd || !cmd_path)
@@ -72,14 +73,13 @@ int	ft_pipex(char **cmds, char **paths_env)
 {
 	int		end[2];
 	int		fdin;
-	int		fdout;
 
 	fdin = ft_redirect_input(*cmds++);
 	while (*(cmds + 2))
 	{
 		if (pipe(end) < 0)
 			return (perror("pipe"), EXIT_FAILURE);
-		ft_exec_cmd(*cmds, paths_env, fdin, end[1]);
+		ft_exec_cmd(*cmds, paths_env, fdin, end);
 		close(fdin);
 		fdin = dup(end[0]);
 		if (fdin < 0)
@@ -87,8 +87,12 @@ int	ft_pipex(char **cmds, char **paths_env)
 		(close(end[1]), close(end[0]));
 		cmds++;
 	}
-	fdout = open(*(cmds + 1), O_WRONLY | O_CREAT | O_TRUNC, 0666);
-	ft_exec_cmd(*cmds, paths_env, fdin, fdout);
-	(close(fdin), close(fdout));
+	if (pipe(end) < 0)
+		return (perror("pipe"), EXIT_FAILURE);
+	end[1] = open(*(cmds + 1), O_WRONLY | O_CREAT | O_TRUNC, 0666);
+	if (end[1] < 0)
+		return (perror(*(cmds + 1)), EXIT_FAILURE);
+	ft_exec_cmd(*cmds, paths_env, fdin, end);
+	(close(fdin), close(end[1]), close(end[0]));
 	return (EXIT_SUCCESS);
 }
