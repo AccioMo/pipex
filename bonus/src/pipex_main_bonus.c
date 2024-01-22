@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 17:09:37 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/20 16:00:35 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/01/22 11:15:43 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,13 @@ int	main(int argc, char *argv[], char *env[])
 	int		exit_status;
 
 	if (argc < 5)
+	{
+		ft_putstr_fd("usage:	./pipex_bonus infile cmd1 ... cmd2 outfile\n" \
+			, 2);
+		ft_putstr_fd("	./pipex_bonus here_doc LIMITER cmd1 ... cmd2 outfile\n" \
+			, 2);
 		return (0);
+	}
 	paths_env = ft_get_paths(env);
 	if (!paths_env)
 		return (1);
@@ -27,7 +33,7 @@ int	main(int argc, char *argv[], char *env[])
 	else
 		exit_status = ft_pipex(argv + 1, paths_env);
 	while (wait(NULL) > 0)
-		;
+		wait(NULL);
 	ft_free(paths_env);
 	return (exit_status);
 }

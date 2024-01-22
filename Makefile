@@ -47,6 +47,7 @@ $(BONUS_OBJ_DIR)%.o: $(BONUS_SRC_DIR)%.c $(BONUS_HEADER)
 
 clean:
 	rm -f $(OBJ) $(BONUS_OBJ)
+	rmdir $(OBJ_DIR) $(BONUS_OBJ_DIR) 2>/dev/null || true
 
 fclean: clean
 	rm -f $(NAME) $(BONUS)
