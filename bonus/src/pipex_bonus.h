@@ -6,14 +6,14 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 00:38:40 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/20 15:44:01 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/02/23 19:01:24 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_BONUS_H
 # define PIPEX_BONUS_H
 
-# define BUFFER_SIZE 1
+# define BUFFER_SIZE 1024
 
 # include <unistd.h>
 # include <stdlib.h>
@@ -22,6 +22,9 @@
 # include <errno.h>
 # include "../../libft/libft.h"
 # include "../../get_next_line/get_next_line.h"
+
+/* Checks number of arguments passed to the program. Exits if `argc < 5`. */
+void	ft_input_check(int argc, char *here_doc);
 
 /* Takes in a null-terminated array of `cmds`, executes each in new */
 /* execve(2) process, and outputs to file with same name as last element */

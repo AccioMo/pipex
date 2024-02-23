@@ -8,7 +8,7 @@ NAME = pipex
 SRC_DIR = src/
 OBJ_DIR = obj/
 HEADER = $(SRC_DIR)pipex.h
-FILES = pipex_main.c pipex_cmd.c pipex_function.c
+FILES = pipex_main.c pipex_cmd.c pipex_function.c pipex_execute.c
 SRC = $(addprefix $(SRC_DIR), $(FILES))
 OBJ = $(addprefix $(OBJ_DIR), $(FILES:.c=.o))
 
@@ -47,7 +47,6 @@ $(BONUS_OBJ_DIR)%.o: $(BONUS_SRC_DIR)%.c $(BONUS_HEADER)
 
 clean:
 	rm -f $(OBJ) $(BONUS_OBJ)
-	rmdir $(OBJ_DIR) $(BONUS_OBJ_DIR) 2>/dev/null || true
 
 fclean: clean
 	rm -f $(NAME) $(BONUS)

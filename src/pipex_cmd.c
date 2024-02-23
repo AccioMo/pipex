@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:54:49 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/22 10:59:30 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/02/23 17:34:05 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ char	*ft_match_path(char *command, char **paths_env)
 	{
 		if (access(command, F_OK) == 0)
 			return (ft_strdup(command));
-		return (perror(command), NULL);
+		perror(command);
+		return (NULL);
 	}
 	while (*paths_env)
 	{

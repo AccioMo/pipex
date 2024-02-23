@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 00:38:40 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/20 16:02:32 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/02/23 18:47:29 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@
 # include <stdio.h>
 # include <errno.h>
 # include "../libft/libft.h"
+
+/* Checks number of arguments passed to the program. Exits if `argc != 5`. */
+void	ft_input_check(int argc);
 
 /* Takes in a null-terminated array of `cmds`, executes each in new */
 /* execve(2) process, and outputs to file with same name as last element */

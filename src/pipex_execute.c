@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_execute_bonus.c                              :+:      :+:    :+:   */
+/*   pipex_execute.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/05 20:32:48 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/02/23 18:49:44 by mzeggaf          ###   ########.fr       */
+/*   Created: 2024/02/23 18:16:59 by mzeggaf           #+#    #+#             */
+/*   Updated: 2024/02/23 18:49:42 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "pipex.h"
 
 static void	ft_perror(char **cmd)
 {
@@ -30,7 +30,7 @@ static void	ft_perror(char **cmd)
 	exit(EXIT_FAILURE);
 }
 
-void	ft_dup_pipes(int cmd_in, int *fd_pipe)
+static void	ft_dup_pipes(int cmd_in, int *fd_pipe)
 {
 	if (dup2(cmd_in, 0) < 0 || dup2(fd_pipe[1], 1) < 0)
 	{
