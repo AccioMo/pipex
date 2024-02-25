@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/23 18:16:59 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/02/23 18:49:42 by mzeggaf          ###   ########.fr       */
+/*   Created: 2024/01/05 20:32:48 by mzeggaf           #+#    #+#             */
+/*   Updated: 2024/02/25 16:37:40 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void	ft_perror(char **cmd)
 	exit(EXIT_FAILURE);
 }
 
-static void	ft_dup_pipes(int cmd_in, int *fd_pipe)
+void	ft_dup_pipes(int cmd_in, int *fd_pipe)
 {
 	if (dup2(cmd_in, 0) < 0 || dup2(fd_pipe[1], 1) < 0)
 	{
@@ -45,7 +45,28 @@ static void	ft_dup_pipes(int cmd_in, int *fd_pipe)
 	}
 }
 
-void	ft_exec_cmd(char *full_cmd, char **paths_env, int cmd_in, int *fd_pipe)
+char	*ft_allocate_cmd(char **cmd, char **env)
+{
+	char	**paths_env;
+	char	*cmd_path;
+
+	paths_env = ft_get_paths(env);
+	if (!paths_env)
+	{
+		ft_free(cmd);
+		return (NULL);
+	}
+	cmd_path = ft_match_path(*cmd, paths_env);
+	ft_free(paths_env);
+	if (!cmd_path)
+	{
+		ft_free(cmd);
+		return (NULL);
+	}
+	return (cmd_path);
+}
+
+void	ft_exec_cmd(char *full_cmd, char **env, int cmd_in, int *fd_pipe)
 {
 	char	**cmd;
 	char	*cmd_path;
@@ -57,15 +78,13 @@ void	ft_exec_cmd(char *full_cmd, char **paths_env, int cmd_in, int *fd_pipe)
 		if (cmd_in < 0)
 			exit(EXIT_FAILURE);
 		ft_dup_pipes(cmd_in, fd_pipe);
-		cmd = ft_split(full_cmd, ' ');
-		cmd_path = ft_match_path(*cmd, paths_env);
-		if (!cmd || !cmd_path)
-		{
-			free(cmd_path);
-			ft_free(cmd);
+		cmd = ft_cmd_split(full_cmd, ' ');
+		if (!cmd)
 			exit(EXIT_FAILURE);
-		}
-		execve(cmd_path, cmd, NULL);
+		cmd_path = ft_allocate_cmd(cmd, env);
+		if (!cmd_path)
+			exit(EXIT_FAILURE);
+		execve(cmd_path, cmd, env);
 		free(cmd_path);
 		ft_perror(cmd);
 	}

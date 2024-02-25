@@ -6,86 +6,85 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 20:47:41 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/01/15 18:59:12 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/02/25 14:46:20 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	is_sep(char *s, char c)
+static int	ft_sep(char c, char sep)
 {
-	if (*s != c && (*(s + 1) == c || *(s + 1) == '\0'))
+	if (c == '\0' || c == sep)
 		return (1);
 	else
 		return (0);
 }
 
-static int	count_words(char *s, char c)
+static int	ft_word_count(char *str, char c)
 {
-	int	words;
+	int	wc;
 
-	words = 0;
-	while (*s)
+	wc = 0;
+	while (*str)
 	{
-		if (is_sep(s, c))
-			words++;
-		s++;
+		if (!ft_sep(*str, c) && ft_sep(*(str + 1), c))
+			wc++;
+		str++;
 	}
-	if (words == 0)
-		return (1);
-	return (words);
+	return (wc);
 }
 
-static char	*assign_word(char **tab, char *s, char c)
+static char	*ft_get_word(char **array, char *str, char c)
 {
 	int	len;
 
 	len = 0;
-	while (*s && *s == c)
-		s++;
-	while (*(s + len) && *(s + len) != c)
+	while (ft_sep(*str, c))
+		str++;
+	while (!ft_sep(*(str + len), c))
 		len++;
-	*tab = ft_substr(s, 0, len);
-	if (!*tab)
+	*array = (char *)malloc((len + 1) * sizeof(char));
+	ft_strlcpy(*array, str, len + 1);
+	if (!*array)
 		return (NULL);
-	return (s + len);
+	return (str + len);
 }
 
-static void	ft_free_all(char **ptr, char *end)
+static void	ft_free(char **ptr)
 {
-	int	i;
+	char	**hold;
 
-	i = 0;
-	while (*(ptr + i) != end)
-	{
-		free(*(ptr + i));
-		i++;
-	}
-	free(ptr);
+	hold = ptr;
+	if (!ptr)
+		return ;
+	while (*ptr)
+		free(*ptr++);
+	free(hold);
 }
 
-char	**ft_split(char *s, char c)
+char	**ft_split(char *str, char c)
 {
-	char	**tab;
-	int		words;
+	char	**array;
+	int		wc;
 	int		i;
 
 	i = 0;
-	if (!s)
+	if (!str)
 		return (NULL);
-	words = count_words(s, c);
-	tab = (char **)malloc((words + 1) * sizeof(char *));
-	if (!tab)
+	wc = ft_word_count(str, c);
+	array = (char **)malloc((wc + 1) * sizeof(char *));
+	if (!array)
 		return (NULL);
-	tab[words] = NULL;
-	if (words == 1)
-		c = '\0';
-	while (i < words)
+	*(array + wc) = NULL;
+	while (i < wc)
 	{
-		s = assign_word(tab + i, s, c);
-		if (s == NULL)
-			return (ft_free_all(tab, *(tab + i)), NULL);
+		str = ft_get_word(array + i, str, c);
+		if (!str)
+		{
+			ft_free(array);
+			return (NULL);
+		}
 		i++;
 	}
-	return (tab);
+	return (array);
 }

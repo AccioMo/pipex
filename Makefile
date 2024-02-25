@@ -3,12 +3,13 @@ FLAGS = -Wall -Wextra -Werror
 LIBFT = libft/libft.a
 LIBFT_DIR = libft/
 GNL = get_next_line/get_next_line.c get_next_line/get_next_line_utils.c
+GNL_HEADER = get_next_line/get_next_line.h
 
 NAME = pipex
 SRC_DIR = src/
 OBJ_DIR = obj/
 HEADER = $(SRC_DIR)pipex.h
-FILES = pipex_main.c pipex_cmd.c pipex_function.c pipex_execute.c
+FILES = pipex_main.c pipex_cmd.c pipex_split.c pipex_function.c pipex_execute.c
 SRC = $(addprefix $(SRC_DIR), $(FILES))
 OBJ = $(addprefix $(OBJ_DIR), $(FILES:.c=.o))
 
@@ -16,7 +17,7 @@ BONUS = pipex_bonus
 BONUS_SRC_DIR = bonus/src/
 BONUS_OBJ_DIR = bonus/obj/
 BONUS_HEADER = $(BONUS_SRC_DIR)pipex_bonus.h
-BONUS_FILES = pipex_main_bonus.c pipex_execute_bonus.c pipex_cmd_bonus.c pipex_function_bonus.c pipex_heredoc_bonus.c
+BONUS_FILES = pipex_main_bonus.c pipex_execute_bonus.c pipex_split_bonus.c pipex_cmd_bonus.c pipex_function_bonus.c pipex_heredoc_bonus.c
 BONUS_SRC = $(addprefix $(BONUS_SRC_DIR), $(BONUS_FILES))
 BONUS_OBJ = $(addprefix $(BONUS_OBJ_DIR), $(BONUS_FILES:.c=.o))
 
@@ -42,7 +43,7 @@ $(BONUS_OBJ_DIR):
 $(BONUS): $(BONUS_OBJ)
 	$(CC) $(FLAGS) $(BONUS_OBJ) $(LIBFT) $(GNL) -o $(BONUS)
 
-$(BONUS_OBJ_DIR)%.o: $(BONUS_SRC_DIR)%.c $(BONUS_HEADER)
+$(BONUS_OBJ_DIR)%.o: $(BONUS_SRC_DIR)%.c $(BONUS_HEADER) $(GNL_HEADER)
 	$(CC) $(FLAGS) -c $< -o $@
 
 clean:

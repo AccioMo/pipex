@@ -6,15 +6,15 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:39:37 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/02/23 19:04:14 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/02/25 11:28:31 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-void	ft_input_check(int argc, char *here_doc)
+void	ft_input_check(int argc, char **argv)
 {
-	if (argc - (ft_strncmp(here_doc, "here_doc\0", 9) == 0) < 5)
+	if (argc < 5 || (!ft_strncmp(argv[1], "here_doc\0", 9) && argc < 6))
 	{
 		ft_putstr_fd("usage:	./pipex_bonus infile cmd1 ... cmd2 outfile\n" \
 			, 2);
@@ -46,7 +46,7 @@ static int	ft_redirect_input(char *infile)
 	return (fd);
 }
 
-static int	ft_redirect_output(char **cmds, int fdin, char **paths_env)
+static int	ft_redirect_output(char **cmds, int fdin, char **env)
 {
 	int	end[2];
 
@@ -64,14 +64,14 @@ static int	ft_redirect_output(char **cmds, int fdin, char **paths_env)
 		perror(*(cmds + 1));
 		return (EXIT_FAILURE);
 	}
-	ft_exec_cmd(*cmds, paths_env, fdin, end);
+	ft_exec_cmd(*cmds, env, fdin, end);
 	close(fdin);
 	close(end[1]);
 	close(end[0]);
 	return (EXIT_SUCCESS);
 }
 
-int	ft_pipex(char **cmds, char **paths_env)
+int	ft_pipex(char **cmds, char **env)
 {
 	int		end[2];
 	int		fdin;
@@ -84,7 +84,7 @@ int	ft_pipex(char **cmds, char **paths_env)
 			perror("pipe");
 			return (EXIT_FAILURE);
 		}
-		ft_exec_cmd(*cmds, paths_env, fdin, end);
+		ft_exec_cmd(*cmds, env, fdin, end);
 		close(fdin);
 		fdin = dup(end[0]);
 		if (fdin < 0)
@@ -96,6 +96,6 @@ int	ft_pipex(char **cmds, char **paths_env)
 		close(end[0]);
 		cmds++;
 	}
-	fdin = ft_redirect_output(cmds, fdin, paths_env);
+	fdin = ft_redirect_output(cmds, fdin, env);
 	return (fdin);
 }
