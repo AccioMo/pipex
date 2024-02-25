@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 20:32:48 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/02/25 21:00:22 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/02/25 21:33:01 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ static void	ft_perror(char **cmd)
 	}
 	else
 		perror(*cmd);
-	ft_free(cmd);
-	exit(EXIT_FAILURE);
 }
 
 void	ft_dup_pipes(int cmd_in, int *fd_pipe)
@@ -88,6 +86,7 @@ void	ft_exec_cmd(char *full_cmd, char **env, int cmd_in, int *fd_pipe)
 		ft_perror(cmd);
 		free(cmd_path);
 		ft_free(cmd);
+		exit(1);
 	}
 	else if (pid < 0)
 		perror("fork");

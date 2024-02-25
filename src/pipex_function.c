@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:39:37 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/02/25 16:38:22 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/02/25 21:33:09 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ static int	ft_redirect_output(char **cmds, int fdin, char **env)
 	if (end[1] < 0)
 	{
 		close(end[0]);
-		close(end[1]);
 		perror(*(cmds + 1));
 		return (EXIT_FAILURE);
 	}
