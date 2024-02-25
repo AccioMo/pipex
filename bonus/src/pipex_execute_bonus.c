@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 20:32:48 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/02/25 16:31:46 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/02/25 21:00:22 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,9 @@ void	ft_exec_cmd(char *full_cmd, char **env, int cmd_in, int *fd_pipe)
 		if (!cmd_path)
 			exit(EXIT_FAILURE);
 		execve(cmd_path, cmd, env);
-		free(cmd_path);
 		ft_perror(cmd);
+		free(cmd_path);
+		ft_free(cmd);
 	}
 	else if (pid < 0)
 		perror("fork");

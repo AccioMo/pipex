@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:54:49 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/02/25 16:48:03 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/02/25 20:46:36 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,24 @@ char	**ft_get_paths(char **env)
 char	*ft_cmd_cpy(char *dst, char *src, int len)
 {
 	int	i;
-	int	quotes;
 
 	i = 0;
-	quotes = 0;
 	while (i < len)
 	{
-		if (!quotes && *src == '\\' && *(src + 1))
+		if (*src == '\\' && *(src + 1))
 			src++;
 		else if (*src == '\'' || *src == '\"')
 		{
-			quotes = !quotes;
 			src++;
+			if (*(src - 1) == '\'')
+				while (*src && *src != '\'')
+					*(dst + i++) = *src++;
+			else if (*(src - 1) == '\"')
+				while (*src && *src != '\"')
+					*(dst + i++) = *src++;
 		}
-		*(dst + i) = *src;
+		else
+			*(dst + i) = *src;
 		src++;
 		i++;
 	}
