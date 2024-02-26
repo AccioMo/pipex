@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:54:49 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/02/25 20:45:28 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/02/26 16:01:14 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 
 char	**ft_get_paths(char **env)
 {
+	if (!*env)
+		return (ft_split("/goinfre/mzeggaf/.brew/bin:/usr/local/bin:\
+		/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:\
+		/goinfre/mzeggaf/.brew/bin:/Users/mzeggaf/Desktop/nodejs/bin", ':'));
 	while (*env)
 	{
 		if (!ft_strncmp(*env, "PATH", 4))
@@ -43,9 +47,7 @@ char	*ft_cmd_cpy(char *dst, char *src, int len)
 					*(dst + i++) = *src++;
 		}
 		else
-			*(dst + i) = *src;
-		src++;
-		i++;
+			*(dst + i++) = *src++;
 	}
 	*(dst + i) = '\0';
 	return (dst);

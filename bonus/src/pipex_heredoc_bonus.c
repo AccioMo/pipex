@@ -6,7 +6,7 @@
 /*   By: mzeggaf <mzeggaf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:40:33 by mzeggaf           #+#    #+#             */
-/*   Updated: 2024/02/23 18:52:57 by mzeggaf          ###   ########.fr       */
+/*   Updated: 2024/02/26 15:12:56 by mzeggaf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,13 @@ static int	is_limiter(char *str, char *limiter)
 	return (0);
 }
 
-static int	ft_hd_redirect_output(char **cmds, int fdin, char **paths_env)
+static int	ft_hd_redirect_output(char **cmds, int fdin, char **env)
 {
 	int	end[2];
 
 	if (pipe(end) < 0)
 	{
+		close(fdin);
 		perror("pipe");
 		return (EXIT_FAILURE);
 	}
@@ -39,19 +40,19 @@ static int	ft_hd_redirect_output(char **cmds, int fdin, char **paths_env)
 	end[1] = open(*(cmds + 1), O_WRONLY | O_CREAT | O_APPEND, 0666);
 	if (end[1] < 0)
 	{
+		close(fdin);
 		close(end[0]);
-		close(end[1]);
 		perror(*(cmds + 1));
 		return (EXIT_FAILURE);
 	}
-	ft_exec_cmd(*cmds, paths_env, fdin, end);
+	ft_exec_cmd(*cmds, env, fdin, end);
 	close(fdin);
 	close(end[1]);
 	close(end[0]);
 	return (EXIT_SUCCESS);
 }
 
-static int	ft_here_doc_pipe(char **cmds, int fdin, char **paths_env)
+static int	ft_here_doc_pipe(char **cmds, int fdin, char **env)
 {
 	int		end[2];
 
@@ -59,23 +60,27 @@ static int	ft_here_doc_pipe(char **cmds, int fdin, char **paths_env)
 	{
 		if (pipe(end) < 0)
 		{
+			close(fdin);
 			perror("pipe");
 			return (EXIT_FAILURE);
 		}
-		ft_exec_cmd(*cmds, paths_env, fdin, end);
+		ft_exec_cmd(*cmds, env, fdin, end);
 		close(fdin);
 		fdin = dup(end[0]);
-		if (fdin < 0)
-			return (perror("dup"), EXIT_FAILURE);
 		close(end[1]);
 		close(end[0]);
+		if (fdin < 0)
+		{
+			perror("dup");
+			return (EXIT_FAILURE);
+		}
 		cmds++;
 	}
-	fdin = ft_hd_redirect_output(cmds, fdin, paths_env);
+	fdin = ft_hd_redirect_output(cmds, fdin, env);
 	return (fdin);
 }
 
-int	ft_here_doc(char **args, char **paths_env)
+int	ft_here_doc(char **args, char **env)
 {
 	char	*buffer;
 	char	*input;
@@ -89,6 +94,8 @@ int	ft_here_doc(char **args, char **paths_env)
 		free(buffer);
 		ft_putstr_fd("pipe heredoc> ", 1);
 		buffer = get_next_line(0);
+		if (!buffer)
+			break ;
 	}
 	free(buffer);
 	if (pipe(fd) < 0)
@@ -99,5 +106,5 @@ int	ft_here_doc(char **args, char **paths_env)
 	ft_putstr_fd(input, fd[1]);
 	free(input);
 	close(fd[1]);
-	return (ft_here_doc_pipe(args + 1, fd[0], paths_env));
+	return (ft_here_doc_pipe(args + 1, fd[0], env));
 }
